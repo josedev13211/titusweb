@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>WEB Pokemons prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <header>
+    <div class="header-content">
+      <h1>Para titu ♥️</h1>
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search" placeholder="Buscar por nombre...">
+      </div>
+      <div class="header-buttons">
+        <button id="compare-btn">
+          Comparar Pokémons
+        </button>
+        <span class="compare-badge hidden" id="compare-badge">0</span>
+        </button>
+        <button id="menu-btn">Filtros</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu-overlay" id="menu-overlay"></div>
+
+  <nav id="menu">
+    <div class="menu-header">
+      <h2>Filtros</h2>
+      <button class="close-menu" id="close-menu">✕</button>
+    </div>
+    
+    <div class="menu-section">
+      <h3>Ver Todo</h3>
+      <button class="menu-btn" data-filter="all">Todos los Pokémon</button>
+    </div>
+
+<div class="menu-section">
+  <h3>Generaciones</h3>
+  <button class="menu-btn" data-gen="1">Generación 1 </button>
+  <button class="menu-btn" data-gen="2">Generación 2 </button>
+  <button class="menu-btn" data-gen="3">Generación 3 </button>
+  <button class="menu-btn" data-gen="4">Generación 4 </button>
+  <button class="menu-btn" data-gen="5">Generación 5 </button>
+  <button class="menu-btn" data-gen="6">Generación 6 </button>
+  <button class="menu-btn" data-gen="7">Generación 7 </button>
+  <button class="menu-btn" data-gen="8">Generación 8 </button>
+  <button class="menu-btn" data-gen="9">Generación 9 </button>
+</div>
+
+
+    <div class="menu-section">
+      <h3>Tipos</h3>
+      <button class="menu-btn" data-type="fire">🔥 Fuego</button>
+      <button class="menu-btn" data-type="water">💧 Agua</button>
+      <button class="menu-btn" data-type="grass">🌿 Planta</button>
+      <button class="menu-btn" data-type="electric">⚡ Eléctrico</button>
+      <button class="menu-btn" data-type="psychic">🔮 Psíquico</button>
+      <button class="menu-btn" data-type="ice">❄️ Hielo</button>
+      <button class="menu-btn" data-type="dragon">🐉 Dragón</button>
+      <button class="menu-btn" data-type="dark">🌑 Siniestro</button>
+      <button class="menu-btn" data-type="fairy">✨ Hada</button>
+    </div>
+
+        <div class="menu-section">
+      <h3>Overlays Titu</h3>
+        <a href="medallas.html" target="_blank" class="menu-btn">Medallas</a>
+        <a href="corazones.html" target="_blank" class="menu-btn">Corazones</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="loading" id="loading">Cargando Pokémon...</div>
+    <div id="pokemon-list"></div>
+  </main>
+
+  <div id="modal">
+    <div class="modal-content"></div>
+  </div>
+
+  <div id="compare-modal">
+    <div class="compare-modal-content"></div>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>

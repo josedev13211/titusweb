@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+.hearts-container {
+  display: grid;
+  grid-template-columns: repeat(5, 80px); 
+  grid-template-rows: repeat(3, 80px);   
+  gap: 10px;
+  justify-content: center;
+  align-items: center;    
+  padding: 20px;
+  max-width: 100%;
+}
+
+
+    .heart-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .heart {
+      font-family: 'Material Icons';
+      font-size: 80px;
+      cursor: pointer;
+      transition: transform 0.2s ease, color 0.2s ease;
+      animation: float 3s ease-in-out infinite;
+      color: #e10600; /* rojo por defecto */
+      filter: drop-shadow(2px 2px 0 #000);
+      user-select: none;
+    }
+
+    .heart.empty {
+      color: #999; /* gris para vacío */
+    }
+
+    .heart:hover {
+      transform: scale(1.2);
+      animation: none;
+    }
+
+    .heart:active {
+      transform: scale(0.95);
+    }
+
+
+    .info-text {
+      margin-top: 30px;
+      color: #666;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 1.8rem; }
+      .hearts-container { gap: 20px; }
+      .heart { font-size: 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts-container" id="hearts-container"></div>
+
+
+  <script>
+    const container = document.getElementById('hearts-container');
+    const hearts = [];
+
+    for (let i = 0; i < 15; i++) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'heart-wrapper';
+
+      const heart = document.createElement('span');
+      heart.className = 'heart';
+      heart.textContent = 'favorite'; // corazón lleno inicial
+      heart.dataset.state = 'full';
+
+      heart.addEventListener('click', function() {
+        if (this.dataset.state === 'full') {
+          this.dataset.state = 'empty';
+          this.textContent = 'heart_broken'; // corazón vacío
+          this.classList.add('empty');
+        } else {
+          this.dataset.state = 'full';
+          this.textContent = 'favorite'; // corazón lleno
+          this.classList.remove('empty');
+        }
+
+        // reinicia animación
+        this.style.animation = 'none';
+        setTimeout(() => { this.style.animation = ''; }, 10);
+      });
+
+      wrapper.appendChild(heart);
+      container.appendChild(wrapper);
+      hearts.push(heart);
+    }
+  </script>
+</body>
+</html>
