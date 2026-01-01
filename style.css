@@ -249,7 +249,7 @@
     }
 
     .card {
-      background: white;
+      background: rgb(255, 0, 242);
       border-radius: 20px;
       padding: 20px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -324,17 +324,38 @@
       color: #666;
     }
 
-    .card img {
-      width: 140px;
-      height: 140px;
-      object-fit: contain;
-      margin: 10px auto;
-      display: block;
-      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-      transition: transform 0.3s;
-      image-rendering: pixelated;
-      animation: float 3s ease-in-out infinite;
-    }
+.card img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 10px auto;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  transition: transform 0.3s;
+  /* ELIMINADO: image-rendering: pixelated; */
+  image-rendering: auto; /* Renderizado suave para imágenes HD */
+  animation: float 3s ease-in-out infinite;
+}
+
+.modal-header img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+  /* ELIMINADO: image-rendering: pixelated; */
+  image-rendering: auto; /* Renderizado suave para imágenes HD */
+  animation: modalPokemonFloat 3s ease-in-out infinite;
+}
+
+.compare-pokemon img {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  display: block;
+  /* ELIMINADO: image-rendering: pixelated; */
+  image-rendering: auto; /* Renderizado suave para imágenes HD */
+}
 
     @keyframes float {
       0%, 100% {
