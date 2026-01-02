@@ -18,7 +18,7 @@
           Comparar Pokémons
         </button>
         <span class="compare-badge hidden" id="compare-badge">0</span>
-        </button>
+        <button id="shiny-toggle" class="shiny-toggle-btn">✨ Modo Shiny</button>
         <button id="menu-btn">Filtros</button>
       </div>
     </div>
@@ -37,19 +37,23 @@
       <button class="menu-btn" data-filter="all">Todos los Pokémon</button>
     </div>
 
-<div class="menu-section">
-  <h3>Generaciones</h3>
-  <button class="menu-btn" data-gen="1">Generación 1 </button>
-  <button class="menu-btn" data-gen="2">Generación 2 </button>
-  <button class="menu-btn" data-gen="3">Generación 3 </button>
-  <button class="menu-btn" data-gen="4">Generación 4 </button>
-  <button class="menu-btn" data-gen="5">Generación 5 </button>
-  <button class="menu-btn" data-gen="6">Generación 6 </button>
-  <button class="menu-btn" data-gen="7">Generación 7 </button>
-  <button class="menu-btn" data-gen="8">Generación 8 </button>
-  <button class="menu-btn" data-gen="9">Generación 9 </button>
-</div>
+    <div class="menu-section">
+      <h3>Especiales</h3>
+      <button class="menu-btn" data-filter="shiny">✨ Solo Shiny</button>
+    </div>
 
+    <div class="menu-section">
+      <h3>Generaciones</h3>
+      <button class="menu-btn" data-gen="1">Generación 1 </button>
+      <button class="menu-btn" data-gen="2">Generación 2 </button>
+      <button class="menu-btn" data-gen="3">Generación 3 </button>
+      <button class="menu-btn" data-gen="4">Generación 4 </button>
+      <button class="menu-btn" data-gen="5">Generación 5 </button>
+      <button class="menu-btn" data-gen="6">Generación 6 </button>
+      <button class="menu-btn" data-gen="7">Generación 7 </button>
+      <button class="menu-btn" data-gen="8">Generación 8 </button>
+      <button class="menu-btn" data-gen="9">Generación 9 </button>
+    </div>
 
     <div class="menu-section">
       <h3>Tipos</h3>
@@ -64,10 +68,10 @@
       <button class="menu-btn" data-type="fairy">✨ Hada</button>
     </div>
 
-        <div class="menu-section">
+    <div class="menu-section">
       <h3>Overlays Titu</h3>
-        <a href="medallas.html" target="_blank" class="menu-btn">Medallas</a>
-        <a href="corazones.html" target="_blank" class="menu-btn">Corazones</a>
+      <a href="medallas.html" target="_blank" class="menu-btn">Medallas</a>
+      <a href="corazones.html" target="_blank" class="menu-btn">Corazones</a>
     </div>
   </nav>
 
@@ -83,7 +87,6 @@
   <div id="compare-modal">
     <div class="compare-modal-content"></div>
   </div>
-
 
   <script src="script.js"></script>
 </body>

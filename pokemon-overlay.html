@@ -155,18 +155,22 @@
   </div>
 
   <script>
-    function getBestAnimatedImage(pokemon) {
-      const animatedOptions = [
+    function getBestAnimatedImage(pokemon, isShiny = false) {
+      const animatedOptions = isShiny ? [
+        pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_shiny,
+        pokemon.sprites.other?.showdown?.front_shiny,
+        pokemon.sprites.other?.['official-artwork']?.front_shiny,
+        pokemon.sprites.other?.home?.front_shiny,
+        pokemon.sprites.front_shiny
+      ] : [
         pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default,
         pokemon.sprites.other?.showdown?.front_default,
-
         pokemon.sprites.other?.['official-artwork']?.front_default,
         pokemon.sprites.other?.home?.front_default,
-
         pokemon.sprites.front_default
       ];
       
-      return animatedOptions.find(sprite => sprite) || pokemon.sprites.front_default;
+      return animatedOptions.find(sprite => sprite) || (isShiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default);
     }
 
     function translateType(type) {
@@ -197,6 +201,7 @@
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const pokemonId = urlParams.get('id');
+        const isShiny = urlParams.get('shiny') === 'true';
         
         if (!pokemonId) {
           document.getElementById('overlay-content').innerHTML = 
@@ -211,7 +216,7 @@
         }
 
         const pokemon = await response.json();
-        const sprite = getBestAnimatedImage(pokemon);
+        const sprite = getBestAnimatedImage(pokemon, isShiny);
         
         const types = pokemon.types.map(t => 
           `<span class="type-tag type-${t.type.name}">${translateType(t.type.name)}</span>`

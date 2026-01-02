@@ -9,15 +9,25 @@ const compareModal = document.getElementById("compare-modal");
 const compareBtn = document.getElementById("compare-btn");
 const compareBadge = document.getElementById("compare-badge");
 const loading = document.getElementById("loading");
+const shinyToggleBtn = document.getElementById("shiny-toggle");
 
 let allPokemons = [];
 let currentList = [];
 let pokemonsByType = {};
 let compareList = [];
+let isShinyMode = false;
 
 // Función para obtener la mejor imagen ANIMADA disponible
-function getBestAnimatedImage(pokemon) {
-  const animatedOptions = [
+function getBestAnimatedImage(pokemon, forceShiny = false) {
+  const useShiny = forceShiny || isShinyMode;
+  
+  const animatedOptions = useShiny ? [
+    pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_shiny,
+    pokemon.sprites.other?.showdown?.front_shiny,
+    pokemon.sprites.other?.['official-artwork']?.front_shiny,
+    pokemon.sprites.other?.home?.front_shiny,
+    pokemon.sprites.front_shiny
+  ] : [
     pokemon.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default,
     pokemon.sprites.other?.showdown?.front_default,
     pokemon.sprites.other?.['official-artwork']?.front_default,
@@ -25,8 +35,19 @@ function getBestAnimatedImage(pokemon) {
     pokemon.sprites.front_default
   ];
   
-  return animatedOptions.find(sprite => sprite) || pokemon.sprites.front_default;
+  return animatedOptions.find(sprite => sprite) || (useShiny ? pokemon.sprites.front_shiny : pokemon.sprites.front_default);
 }
+
+// Toggle Shiny Mode
+shinyToggleBtn.onclick = () => {
+  isShinyMode = !isShinyMode;
+  shinyToggleBtn.classList.toggle('active');
+  shinyToggleBtn.textContent = isShinyMode ? '✨ Modo Normal' : '✨ Modo Shiny';
+  
+  // Recargar la vista actual
+  organizeByType(currentList);
+  renderPokemonsByType();
+};
 
 menuBtn.onclick = () => {
   menu.classList.add("active");
@@ -117,7 +138,7 @@ function showCompareModal() {
   
   compareModal.querySelector(".compare-modal-content").innerHTML = `
     <button class="close-modal">✕</button>
-    <h2 style="text-align: center; margin-bottom: 30px; font-size: 2rem;">Comparación de Pokémon</h2>
+    <h2 style="text-align: center; margin-bottom: 30px; font-size: 2rem;">Comparación de Pokémon ${isShinyMode ? '✨' : ''}</h2>
     
     <div class="compare-grid">
       <div class="compare-pokemon">
@@ -213,7 +234,7 @@ function renderPokemonsByType() {
     const header = document.createElement("div");
     header.className = "type-header";
     header.innerHTML = `
-      <span class="type-badge type-${type}">${translateType(type)}</span>
+      <span class="type-badge type-${type}">${translateType(type)} ${isShinyMode ? '✨' : ''}</span>
       <span class="type-count">${pokemonsByType[type].length} Pokémon</span>
     `;
     
@@ -235,6 +256,10 @@ function createPokemonCard(pokemon) {
   const card = document.createElement("div");
   card.className = "card";
   
+  if (isShinyMode) {
+    card.classList.add("shiny-card");
+  }
+  
   const isSelected = compareList.some(p => p.id === pokemon.id);
   if (isSelected) {
     card.classList.add("compare-selected");
@@ -249,6 +274,7 @@ function createPokemonCard(pokemon) {
   card.innerHTML = `
     <div class="compare-checkbox ${isSelected ? 'checked' : ''}" data-pokemon-id="${pokemon.id}"></div>
     <span class="card-id">#${String(pokemon.id).padStart(3, '0')}</span>
+    ${isShinyMode ? '<span class="shiny-badge">✨</span>' : ''}
     <img src="${animatedSprite}" 
          alt="${pokemon.name}"
          class="pokemon-sprite"
@@ -292,15 +318,25 @@ function showPokemonModal(pokemon) {
     </div>
   `).join("");
 
-  const animatedSprite = getBestAnimatedImage(pokemon);
+  const normalSprite = getBestAnimatedImage(pokemon, false);
+  const shinySprite = getBestAnimatedImage(pokemon, true);
   
   modal.querySelector(".modal-content").innerHTML = `
     <button class="close-modal">✕</button>
     <div class="modal-header">
       <span class="card-id">#${String(pokemon.id).padStart(3, '0')}</span>
-      <img src="${animatedSprite}" 
-           alt="${pokemon.name}"
-           class="pokemon-sprite">
+      
+      <div class="sprite-comparison">
+        <div class="sprite-container">
+          <img src="${normalSprite}" alt="${pokemon.name}" class="pokemon-sprite">
+          <span class="sprite-label">Normal</span>
+        </div>
+        <div class="sprite-container">
+          <img src="${shinySprite}" alt="${pokemon.name} shiny" class="pokemon-sprite shiny-sprite">
+          <span class="sprite-label">✨ Shiny</span>
+        </div>
+      </div>
+      
       <h2>${pokemon.name}</h2>
       <div class="types-list">${types}</div>
     </div>
@@ -323,9 +359,15 @@ function showPokemonModal(pokemon) {
       </div>
 
       <div class="info-section" style="text-align: center;">
-        <button class="overlay-btn" data-pokemon-id="${pokemon.id}">
-          🎬 Mostrar Overlay para OBS
-        </button>
+        <h3>Overlays para OBS</h3>
+        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+          <button class="menu-btn normal-overlay" data-pokemon-id="${pokemon.id}" data-shiny="false">
+            🎬 Overlay Normal
+          </button>
+          <button class="menu-btn shiny-overlay" data-pokemon-id="${pokemon.id}" data-shiny="true">
+            ✨ Overlay Shiny
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -336,9 +378,15 @@ function showPokemonModal(pokemon) {
     modal.classList.remove("active");
   };
 
-  // Evento para el botón de overlay
-  modal.querySelector(".overlay-btn").onclick = () => {
-    const overlayUrl = `pokemon-overlay.html?id=${pokemon.id}`;
+  modal.querySelector(".normal-overlay").onclick = (e) => {
+    const pokemonId = e.target.dataset.pokemonId;
+    const overlayUrl = `pokemon-overlay.html?id=${pokemonId}&shiny=false`;
+    window.open(overlayUrl, '_blank', 'width=600,height=700');
+  };
+
+  modal.querySelector(".shiny-overlay").onclick = (e) => {
+    const pokemonId = e.target.dataset.pokemonId;
+    const overlayUrl = `pokemon-overlay.html?id=${pokemonId}&shiny=true`;
     window.open(overlayUrl, '_blank', 'width=600,height=700');
   };
 }
@@ -376,6 +424,11 @@ document.querySelectorAll(".menu-btn").forEach(btn => {
     pokemonList.innerHTML = "";
     
     if (btn.dataset.filter === "all") {
+      await loadAllPokemons();
+    } else if (btn.dataset.filter === "shiny") {
+      isShinyMode = true;
+      shinyToggleBtn.classList.add('active');
+      shinyToggleBtn.textContent = '✨ Modo Normal';
       await loadAllPokemons();
     } else if (btn.dataset.gen) {
       await loadGeneration(btn.dataset.gen);
